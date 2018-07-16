@@ -20,10 +20,7 @@ class Page:
         return self._parsed_url
 
     def _get_live_response(self):
-        try:
-            resp = requests.get(self.url)
-        except:
-            raise PageRequestError
+        resp = requests.get(self.url)
         if resp.status_code != 200:
             raise PageRequestError
         return resp
