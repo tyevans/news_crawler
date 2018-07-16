@@ -9,6 +9,7 @@ from reppy.robots import Robots
 
 logger = getLogger(__name__)
 
+
 class Crawler:
     """ Web crawler that dispatches crawled pages to a
     router for further processing.

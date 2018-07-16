@@ -4,7 +4,8 @@ import requests
 from bs4 import BeautifulSoup
 
 
-class PageRequestError(Exception): pass
+class PageRequestError(Exception):
+    pass
 
 
 class Page:

@@ -11,9 +11,8 @@ def save_page(page):
 
 
 if __name__ == "__main__":
-
     try:
-        import http.client  as httplib
+        import http.client as httplib
     except ImportError:
         import httplib
 
