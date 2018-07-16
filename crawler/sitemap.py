@@ -11,7 +11,7 @@ ns = {
 
 
 def get_text(element, default=None):
-    return element.text if element else default
+    return element.text if element is not None else default
 
 
 class Sitemap:
@@ -31,6 +31,25 @@ class Sitemap:
         return [sitemap.find('sitemap:loc', ns).text
                 for sitemap in etree.findall("sitemap:sitemap", ns)]
 
+    def _extract_news_info(self, urlElement):
+        news = urlElement.find("news:news", ns)
+        if news:
+            publication = news.find("news:publication", ns)
+            news_dict = {
+                'publication': {
+                    'name': publication.find("news:name", ns).text,
+                    'language': publication.find("news:language", ns).text
+                },
+                'publication_date': get_text(
+                    news.find("news:publication_date", ns)),
+                'title': news.find("news:title", ns).text
+            }
+
+            keywords_el = news.find("news:keywords", ns)
+            if keywords_el:
+                news_dict['keywords'] = keywords_el.text.split(",")
+            return news_dict
+
     def get_urls(self):
         etree = self.get_element_tree()
         urls = []
@@ -47,23 +66,9 @@ class Sitemap:
                 'priority': get_text(priority)
             }
 
-            news = url.find("news:news", ns)
-            if news:
-                news_dict = {}
-                news_dict['publication'] = {}
-                publication = news.find("news:publication", ns)
-
-                news_dict['publication']['name'] = publication.find("news:name",
-                                                                    ns).text
-                news_dict['publication']['language'] = publication.find(
-                    "news:language", ns).text
-                news_dict['publication_date'] = get_text(
-                    news.find("news:publication_date", ns))
-                news_dict['title'] = news.find("news:title", ns).text
-                keywords_el = news.find("news:keywords", ns)
-                if keywords_el:
-                    news_dict['keywords'] = keywords_el.text.split(",")
-                page['news'] = news_dict
+            news = self._extract_news_info(url)
+            if news is not None:
+                page['news'] = news
 
             image = url.find("image:image", ns)
             if image:
