@@ -75,12 +75,6 @@ class Sitemap:
 
 
 def crawl_sitemaps(url, max_depth=1):
-    ns = {
-        "sitemap": "http://www.sitemaps.org/schemas/sitemap/0.9",
-        "news": "http://www.google.com/schemas/sitemap-news/0.9",
-        "image": "http://www.google.com/schemas/sitemap-image/1.1"
-    }
-
     robots = Robots.fetch(parse.urljoin(url, "/robots.txt"))
 
     sitemap_stack = []

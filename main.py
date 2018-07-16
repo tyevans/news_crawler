@@ -11,15 +11,15 @@ def save_page(page):
 
 
 if __name__ == "__main__":
-    # Override the 100 header limit on responses
-    # Otherwise our requests to the washington post will fail.
+
     try:
-        import http.client
-        http.client._MAXHEADERS = 1000
+        import http.client  as httplib
     except ImportError:
         import httplib
-        httplib._MAXHEADERS = 1000
 
+    # Override the 100 header limit on responses
+    # Otherwise our requests to the washington post will fail.
+    httplib._MAXHEADERS = 1000
 
     starting_urls = [
         'http://thehill.com/',
