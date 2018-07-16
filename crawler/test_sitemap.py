@@ -1,9 +1,8 @@
-import io
 import os
 from unittest import mock
 
 # This method will be used by the mock to replace requests.get
-from crawler.sitemap import Sitemap, crawl_sitemaps
+from crawler.sitemap import Sitemap
 
 
 def mocked_requests_get(url, *args, **kwargs):
