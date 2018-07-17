@@ -1,3 +1,5 @@
+import time
+
 from crawler.router import PageRouter
 from crawler.crawler import Crawler
 from models import insert_page, get_connection
@@ -39,4 +41,6 @@ if __name__ == "__main__":
 
     c = Crawler(router, url_stack=[u['location'] for u in urls])
     c.max_depth = 1
+    start = time.time()
     c.start()
+    print(time.time() - start)
