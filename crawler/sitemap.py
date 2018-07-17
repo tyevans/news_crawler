@@ -3,7 +3,7 @@ from six.moves.urllib import parse
 from reppy.robots import Robots
 import requests
 
-ns = {
+xmlns = {
     "sitemap": "http://www.sitemaps.org/schemas/sitemap/0.9",
     "news": "http://www.google.com/schemas/sitemap-news/0.9",
     "image": "http://www.google.com/schemas/sitemap-image/1.1"
@@ -28,24 +28,24 @@ class Sitemap:
 
     def get_child_sitemap_urls(self):
         etree = self.get_element_tree()
-        return [sitemap.find('sitemap:loc', ns).text
-                for sitemap in etree.findall("sitemap:sitemap", ns)]
+        return [sitemap.find('sitemap:loc', xmlns).text
+                for sitemap in etree.findall("sitemap:sitemap", xmlns)]
 
     def _extract_news_info(self, urlElement):
-        news = urlElement.find("news:news", ns)
+        news = urlElement.find("news:news", xmlns)
         if news:
-            publication = news.find("news:publication", ns)
+            publication = news.find("news:publication", xmlns)
             news_dict = {
                 'publication': {
-                    'name': publication.find("news:name", ns).text,
-                    'language': publication.find("news:language", ns).text
+                    'name': publication.find("news:name", xmlns).text,
+                    'language': publication.find("news:language", xmlns).text
                 },
                 'publication_date': get_text(
-                    news.find("news:publication_date", ns)),
-                'title': news.find("news:title", ns).text
+                    news.find("news:publication_date", xmlns)),
+                'title': news.find("news:title", xmlns).text
             }
 
-            keywords_el = news.find("news:keywords", ns)
+            keywords_el = news.find("news:keywords", xmlns)
             if keywords_el:
                 news_dict['keywords'] = keywords_el.text.split(",")
             return news_dict
@@ -53,11 +53,11 @@ class Sitemap:
     def get_urls(self):
         etree = self.get_element_tree()
         urls = []
-        for url in etree.findall("sitemap:url", ns):
-            location = url.find("sitemap:loc", ns)
-            last_modified = url.find("sitemap:lastmod", ns)
-            change_freq = url.find("sitemap:changefreq", ns)
-            priority = url.find("sitemap:priority", ns)
+        for url in etree.findall("sitemap:url", xmlns):
+            location = url.find("sitemap:loc", xmlns)
+            last_modified = url.find("sitemap:lastmod", xmlns)
+            change_freq = url.find("sitemap:changefreq", xmlns)
+            priority = url.find("sitemap:priority", xmlns)
 
             page = {
                 'location': location.text,
@@ -70,9 +70,9 @@ class Sitemap:
             if news is not None:
                 page['news'] = news
 
-            image = url.find("image:image", ns)
+            image = url.find("image:image", xmlns)
             if image:
-                image_url = image.find("image:loc", ns).text
+                image_url = image.find("image:loc", xmlns).text
                 page['image'] = image_url
             urls.append(page)
 
