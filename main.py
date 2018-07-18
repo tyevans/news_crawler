@@ -34,13 +34,12 @@ if __name__ == "__main__":
 
     urls = []
     for s_url in starting_urls:
-        urls.extend(crawl_sitemaps(s_url, max_depth=2))
+        agg_urls = crawl_sitemaps(s_url, max_depth=1)
+        urls.extend(agg_urls)
 
     router = PageRouter()
     router.add_route('.*', save_page)
 
     c = Crawler(router, url_stack=[u['location'] for u in urls])
     c.max_depth = 1
-    start = time.time()
     c.start()
-    print(time.time() - start)

@@ -80,8 +80,8 @@ class Sitemap:
 
 
 def crawl_sitemaps(url, max_depth=1):
-    robots = Robots.fetch(parse.urljoin(url, "/robots.txt"))
-
+    robots_url = parse.urljoin(url, "/robots.txt")
+    robots = Robots.fetch(robots_url)
     sitemap_stack = []
     seen_sitemaps = set()
 

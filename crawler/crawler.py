@@ -32,7 +32,7 @@ class Crawler:
         """
         self.url_stack = []
         self.router = router
-        self.domain_blacklist_func = domain_blacklist_func or (lambda x: True)
+        self.domain_blacklist_func = domain_blacklist_func or (lambda x: False)
         self._robots_parsers = {}
         self._request_times = {}
 
@@ -58,7 +58,7 @@ class Crawler:
 
     def is_delayed(self, url):
         r_parser = self.get_robots_parser(url)
-        delay = r_parser.agent(self.user_agent).delay
+        delay = r_parser.agent(self.user_agent).delay or 0
         now = time.time()
         if self.get_last_request_time(url) + delay < now:
             return False
@@ -70,7 +70,7 @@ class Crawler:
 
     def get_last_request_time(self, url):
         p_url = parse.urlsplit(url)
-        return self._request_times.get(p_url.netloc)
+        return self._request_times.get(p_url.netloc, 0)
 
     def push_url(self, url, depth=0):
         """ Adds `url` to the url stack, depth is how deep into the crawling process
@@ -90,7 +90,6 @@ class Crawler:
         """
         while self.url_stack:
             url, depth = self.url_stack.pop()
-
             if depth >= self.max_depth:
                 continue
 

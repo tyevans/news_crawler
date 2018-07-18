@@ -19,7 +19,7 @@ if __name__ == "__main__":
     conn = get_connection()
     conn.execute("""
         CREATE TABLE pages (
-          url text,
+          url varchar(256) primary key,
           content text,
           crawled boolean default false,
           processed boolean default false
